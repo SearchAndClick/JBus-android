@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AboutMeActivity"
+    android:orientation="vertical"
+    android:gravity="center" >
+
+    <TextView
+        android:id="@+id/initial"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginVertical="24dp"
+        android:background="@drawable/oval"
+        android:gravity="center"
+        android:text="P"
+        android:textColor="@color/white"
+        android:textSize="48dp"
+        tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginVertical="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:text="@string/username"
+                android:textAllCaps="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/username"
+                android:gravity="right"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="@string/empty"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:text="@string/email"
+                android:textAllCaps="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/email"
+                android:gravity="right"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="@string/empty"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:text="@string/balance"
+                android:textAllCaps="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/balance"
+                android:gravity="right"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="@string/empty"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <EditText
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/top_amount_amount"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:hint="Top Up Amount"
+            android:textColorHint="@color/cardview_shadow_start_color"
+            android:minHeight="48dp"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/top_up"
+            android:textSize="16sp"
+            android:text="@string/top_up"
+            app:cornerRadius="21dp"
+            android:textAllCaps="true"
+            android:backgroundTint="#08BCAB"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+</LinearLayout>

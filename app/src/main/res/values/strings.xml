@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">JBus-android</string>
+    <string name="empty">-</string>
+    <string name="balance">Balance</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="activity_about_me_icon">P</string>
+    <string name="top_up">Top Up</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="jbus_login">JBus\n🚌</string>
+    <string name="register_now">Register Now</string>
+    <string name="search_button">Search Button</string>
+    <string name="account_profile">Account Profile</string>
+</resources>
