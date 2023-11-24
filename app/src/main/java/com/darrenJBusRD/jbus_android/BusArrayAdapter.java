@@ -23,16 +23,17 @@ public class BusArrayAdapter extends ArrayAdapter<Bus> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-         View currentItemView = convertView;
+         View currentBusView = convertView;
 
-         if(currentItemView == null) {
-             currentItemView = LayoutInflater.from(getContext()).inflate(R.layout.bus_view, parent, false);
+         if(currentBusView == null) {
+             currentBusView = LayoutInflater.from(getContext()).inflate(R.layout.bus_list_view, parent, false);
          }
 
          Bus currentBusPosition = getItem(position);
 
-         TextView name = currentItemView.findViewById(R.id.name);
+         TextView name = currentBusView.findViewById(R.id.name);
+         name.setText(currentBusPosition.toString());
 
-         return currentItemView;
+         return currentBusView;
     }
 }
