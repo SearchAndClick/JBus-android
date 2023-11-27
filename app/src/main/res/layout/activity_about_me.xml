@@ -108,7 +108,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:paddingVertical="30dp">
 
         <EditText
             android:layout_width="240dp"
@@ -132,6 +133,41 @@
             android:backgroundTint="#08BCAB"
             android:textColor="@color/white"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingVertical="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/renter_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#AFABAB"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="Register your company"
+            android:id="@+id/register_your_company"/>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/manage_bus"
+            android:text="Manage Bus"
+            android:backgroundTint="#08BCAB"
+            android:textColor="@color/white"
+            app:cornerRadius="21dp"
+            android:textSize="16sp"/>
     </LinearLayout>
 
 </LinearLayout>

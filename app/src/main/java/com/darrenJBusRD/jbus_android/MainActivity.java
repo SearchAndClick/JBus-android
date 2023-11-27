@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        busArrayAdapter = new BusArrayAdapter(this, Bus.sampleBusList(20));
+        busArrayAdapter = new BusArrayAdapter(this, Bus.sampleBusList(0));
         listView = findViewById(R.id.listView);
         listView.setAdapter(busArrayAdapter);
 
