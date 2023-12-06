@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="345dp"
+    android:layout_width="390dp"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center_horizontal"
@@ -30,23 +30,23 @@
         android:id="@+id/bus_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         android:hint="Bus Name"
         android:minHeight="24sp"
         android:paddingHorizontal="16dp"
         android:textColorHint="#6E6969"
-        android:textSize="20dp"/>
+        android:textSize="21dp"/>
 
     <EditText
         android:id="@+id/capacity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         android:hint="Capacity"
         android:minHeight="24sp"
         android:paddingHorizontal="16dp"
         android:textColorHint="#6E6969"
-        android:textSize="20dp"/>
+        android:textSize="21dp"/>
 
     <EditText
         android:id="@+id/price"
@@ -57,27 +57,168 @@
         android:minHeight="24sp"
         android:paddingHorizontal="16dp"
         android:textColorHint="#6E6969"
-        android:textSize="20dp"/>
+        android:textSize="21dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="96dp"
             android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:text="Bus Type"/>
+            android:textSize="18dp"
+            android:text="Bus Type"
+            android:textColor="@color/black"/>
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:icon="@drawable/baseline_directions_bus_24" />
-
-        <ScrollView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scrollbarSize="24dp"/>
+            android:src="@drawable/baseline_directions_bus_24" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/bus_type_dropdown"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" >
+
+        <TextView
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Departure"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_home_24" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/departure_dropdown"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Arrival"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_forward_24"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/arrival_dropdown"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8sp"
+        android:textColor="@color/black"
+        android:text="Facilities"
+        android:textSize="18sp"/>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:rowCount="3"
+        android:columnCount="3">
+
+        <CheckBox
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="AC"
+            android:id="@+id/ac_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="WiFi"
+            android:id="@+id/wifi_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="Toilet"
+            android:id="@+id/toilet_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="LCD TV"
+            android:id="@+id/lcd_tv_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="Coolbox"
+            android:id="@+id/coolbox_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="Lunch"
+            android:id="@+id/lunch_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="Large Baggage"
+            android:id="@+id/large_baggage_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="Electric Socket"
+            android:id="@+id/electric_socket_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+    </GridLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Add"
+        android:textAllCaps="true"
+        android:id="@+id/add_button"
+        app:cornerRadius="21dp"
+        android:backgroundTint="#08BCAB"/>
 </LinearLayout>

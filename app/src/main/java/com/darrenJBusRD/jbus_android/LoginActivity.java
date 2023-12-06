@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.darrenJBusRD.jbus_android.model.Account;
 import com.darrenJBusRD.jbus_android.model.BaseResponse;
 import com.darrenJBusRD.jbus_android.request.BaseApiService;
+import com.darrenJBusRD.jbus_android.request.RetrofitClient;
+import com.darrenJBusRD.jbus_android.request.UtilsApi;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView registerNow = null;
     private Button loginButton = null;
     private BaseApiService mApiService;
-    private Context mContext;
+    private Context mContext = this;
     private EditText email, password;
     public static Account loggedAccount;
 
@@ -54,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        mApiService = UtilsApi.getApiService();
         mApiService.login(emailS, passwordS).enqueue(new Callback<BaseResponse<Account>>() {
             @Override
             public void onResponse(Call<BaseResponse<Account>> call, Response<BaseResponse<Account>> response) {
@@ -66,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(res.success) finish();
                 loggedAccount = res.payload;
                 moveActivity(mContext, MainActivity.class);
-                viewToast(mContext, "Welcome Back!");
+                viewToast(mContext, "Welcome!");
             }
 
             @Override

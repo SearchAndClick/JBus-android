@@ -1,19 +1,27 @@
 package com.darrenJBusRD.jbus_android;
 
 import com.darrenJBusRD.jbus_android.model.Account;
+import com.darrenJBusRD.jbus_android.model.BaseResponse;
 import com.darrenJBusRD.jbus_android.request.*;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.content.Context;
+import android.widget.Toast;
 
 import com.darrenJBusRD.jbus_android.model.Bus;
 
@@ -26,7 +34,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BusArrayAdapter busArrayAdapter;
+    public static BusArrayAdapter busArrayAdapter;
     private ListView listView;
     private Button[] buttons;
     private int currentPage = 0;
@@ -38,22 +46,46 @@ public class MainActivity extends AppCompatActivity {
     private Button nextButton = null;
     private ListView busListView = null;
     private HorizontalScrollView pageScroll = null;
+    Context mContext;
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        busArrayAdapter = new BusArrayAdapter(this, Bus.sampleBusList(0));
-        listView = findViewById(R.id.listView);
+        mContext = this;
+        ActionBar actionBar = getActionBar();
+
+        BaseApiService mApiService = UtilsApi.getApiService();
+        mApiService.getAllBus().enqueue(new Callback<List<Bus>>() {
+            @Override
+            public void onResponse(Call<List<Bus>> call, Response<List<Bus>> response) {
+                if(!response.isSuccessful()) {
+                    viewToast(mContext, "Application error " + response.code());
+                    return;
+                }
+                listBus = response.body();
+                busArrayAdapter = new BusArrayAdapter(mContext, listBus);
+            }
+
+            @Override
+            public void onFailure(Call<List<Bus>> call, Throwable t) {
+                viewToast(mContext, "Problem with Server");
+            }
+        });
+
+        listView = findViewById(R.id.list_view_main);
         listView.setAdapter(busArrayAdapter);
 
         prevButton = findViewById(R.id.prev_page);
         nextButton = findViewById(R.id.next_page);
         pageScroll = findViewById(R.id.page_number_scroll);
 
+        /*
         listBus = Bus.sampleBusList(20);
         listSize = listBus.size();
+        busListView = busArrayAdapter.getView();
+        */
 
         paginationFooter();
         goToPage(currentPage);
@@ -68,12 +100,13 @@ public class MainActivity extends AppCompatActivity {
             goToPage(currentPage);
         });
 
-        BaseApiService mApiService = UtilsApi.getApiService();
 
-        mApiService.getAccountById(0).enqueue(new Callback<Account>() {
+        /*
+        mApiService.getAccountById(LoginActivity.loggedAccount.id).enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {
-                if (response.isSuccessful()) {
+                if(!response.isSuccessful()) {
+                    viewToast(mContext, "Application error " + response.code());
                     return;
                 }
                 Account responseAccount = response.body();
@@ -84,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        */
     }
 
     @Override
@@ -91,6 +125,20 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Handle item selection.
+        if(item.getItemId() == R.id.search_menu) {
+            return true;
+        } else if (item.getItemId() == R.id.profile_menu) {
+            moveActivity(mContext, AboutMeActivity.class);
+            return true;
+        } else if (item.getItemId() == R.id.payment_menu) {
+            //moveActivity();
+            return true;
+        } else return super.onOptionsItemSelected(item);
     }
 
     private void paginationFooter() {
@@ -144,5 +192,14 @@ public class MainActivity extends AppCompatActivity {
         BusArrayAdapter paginatedAdapater = (BusArrayAdapter) listView.getAdapter();
         busListView.setAdapter(paginatedAdapater);
 
+    }
+
+    private void moveActivity(Context ctx, Class<?> cls) {
+        Intent intent = new Intent(ctx, cls);
+        startActivity(intent);
+    }
+
+    private void viewToast(Context ctx, String message) {
+        Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show();
     }
 }

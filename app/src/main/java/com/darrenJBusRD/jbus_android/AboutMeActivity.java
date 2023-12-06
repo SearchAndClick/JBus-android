@@ -11,8 +11,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.darrenJBusRD.jbus_android.model.BaseResponse;
 import com.darrenJBusRD.jbus_android.request.BaseApiService;
+import com.darrenJBusRD.jbus_android.request.UtilsApi;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AboutMeActivity extends AppCompatActivity {
 
@@ -27,15 +34,16 @@ public class AboutMeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_me);
 
-        username.findViewById(R.id.username);
-        email.findViewById(R.id.email);
-        balance.findViewById(R.id.balance);
-        topUpAmount.findViewById(R.id.top_amount_amount);
-        topUp.findViewById(R.id.top_up);
-        renterStatus.findViewById(R.id.renter_status);
-        registerCompany.findViewById(R.id.register_your_company);
-        manageBus.findViewById(R.id.manage_bus);
-
+        mContext = this;
+        username = findViewById(R.id.username);
+        email = findViewById(R.id.email);
+        balance = findViewById(R.id.balance);
+        topUpAmount = findViewById(R.id.top_amount_amount);
+        topUp = findViewById(R.id.top_up);
+        renterStatus = findViewById(R.id.renter_status);
+        registerCompany = findViewById(R.id.register_your_company);
+        manageBus = findViewById(R.id.manage_bus);
+        mApiService = UtilsApi.getApiService();
 
         username.setText(LoginActivity.loggedAccount.name);
         email.setText(LoginActivity.loggedAccount.email);
@@ -57,7 +65,12 @@ public class AboutMeActivity extends AppCompatActivity {
             moveActivity(this, ManageBusActivity.class);
         });
         topUp.setOnClickListener(v -> {
-            updateBalance(Integer.parseInt(this.topUpAmount.getText().toString()));
+            String topUpS = this.topUpAmount.getText().toString();
+            if(topUpS.isEmpty()) {
+                viewToast(mContext, "field cannot be empty");
+                return;
+            }
+            updateBalance(Double.parseDouble(this.topUpAmount.getText().toString()));
         });
 
 
@@ -68,8 +81,27 @@ public class AboutMeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void updateBalance(int amount) {
-        LoginActivity.loggedAccount.balance = LoginActivity.loggedAccount.balance + amount;
-        this.balance.setText("" + LoginActivity.loggedAccount.balance);
+    private void updateBalance(double amount) {
+        mApiService.topUp(LoginActivity.loggedAccount.id, amount).enqueue(new Callback<BaseResponse<Double>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<Double>> call, Response<BaseResponse<Double>> response) {
+                if(!response.isSuccessful()) {
+                    viewToast(mContext, "Application error " + response.code());
+                    return;
+                }
+                BaseResponse res = response.body();
+                LoginActivity.loggedAccount.balance = LoginActivity.loggedAccount.balance + (double)(res.payload);
+                balance.setText("" + (int) (LoginActivity.loggedAccount.balance));
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<Double>> call, Throwable t) {
+                viewToast(mContext, "Problem with Server");
+            }
+        });
+    }
+
+    private void viewToast(Context ctx, String message) {
+        Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show();
     }
 }
