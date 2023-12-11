@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:id="@+id/bus_list_view"
+    android:id="@+id/payment_list_view"
     tools:ignore="UselessParent">
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:layout_marginTop="16dp">
 
         <TextView
-            android:id="@+id/name_bus"
+            android:id="@+id/status_payment"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
@@ -24,7 +24,7 @@
             tools:ignore="RtlHardcoded"/>
 
         <TextView
-            android:id="@+id/price_bus"
+            android:id="@+id/departure_payment"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"

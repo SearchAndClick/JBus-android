@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:text="Add Bus"
+        android:text="Booking"
         android:textSize="36dp"
         android:textStyle="bold"
         android:textColor="@color/black"/>
@@ -22,44 +22,92 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:text="Add or edit the bus"
+        android:text="Book a seat"
         android:textSize="18dp"
         android:textColor="#555555"/>
 
-    <EditText
-        android:id="@+id/bus_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="Bus Name"
-        android:minHeight="24sp"
-        android:paddingHorizontal="16dp"
-        android:textColorHint="#6E6969"
-        android:textSize="21dp"/>
+        android:orientation="horizontal"
+        android:gravity="center">
 
-    <EditText
-        android:id="@+id/capacity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="Capacity"
-        android:minHeight="24sp"
-        android:paddingHorizontal="16dp"
-        android:textColorHint="#6E6969"
-        android:textSize="21dp"
-        android:inputType="number"/>
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Bus Name"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/black"
+            android:textSize="21dp"/>
 
-    <EditText
-        android:id="@+id/price"
+        <TextView
+            android:id="@+id/bus_name_book"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textColorHint="#6E6969"
+            android:textSize="21dp"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:hint="Price"
-        android:minHeight="24sp"
-        android:paddingHorizontal="16dp"
-        android:textColorHint="#6E6969"
-        android:textSize="21dp"
-        android:inputType="number"/>
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Capacity"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/black"
+            android:textSize="21dp"/>
+
+        <TextView
+            android:id="@+id/capacity_book"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textSize="21dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Price"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/black"
+            android:textSize="21dp"/>
+
+        <TextView
+            android:id="@+id/price_book"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textSize="21dp"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,10 +126,10 @@
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_directions_bus_24" />
 
-        <Spinner
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:id="@+id/bus_type_dropdown"/>
+            android:id="@+id/bus_type_book"/>
     </LinearLayout>
 
     <LinearLayout
@@ -102,10 +150,10 @@
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_home_24" />
 
-        <Spinner
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:id="@+id/departure_dropdown"/>
+            android:id="@+id/departure_book"/>
     </LinearLayout>
 
     <LinearLayout
@@ -127,10 +175,10 @@
             android:visibility="visible"
             tools:visibility="visible" />
 
-        <Spinner
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:id="@+id/arrival_dropdown"/>
+            android:id="@+id/arrival_book"/>
     </LinearLayout>
 
     <TextView
@@ -148,65 +196,73 @@
         android:rowCount="3"
         android:columnCount="3">
 
-        <CheckBox
+        <TextView
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
             android:text="AC"
             android:id="@+id/ac_box"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 
-        <CheckBox
+        <TextView
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
             android:text="WiFi"
             android:id="@+id/wifi_box"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 
-        <CheckBox
+        <TextView
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
             android:text="Toilet"
             android:id="@+id/toilet_box"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 
-        <CheckBox
+        <TextView
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
             android:text="LCD TV"
             android:id="@+id/lcd_tv_box"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 
-        <CheckBox
+        <TextView
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
             android:text="Coolbox"
             android:id="@+id/coolbox_box"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 
-        <CheckBox
+        <TextView
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
             android:text="Lunch"
             android:id="@+id/lunch_box"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 
-        <CheckBox
+        <TextView
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
             android:text="Large Baggage"
             android:id="@+id/large_baggage_box"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 
-        <CheckBox
+        <TextView
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
             android:text="Electric Socket"
             android:id="@+id/electric_socket_box"
             android:textSize="16sp"
@@ -214,13 +270,81 @@
 
     </GridLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Schedule"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_schedule_24" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/schedule_dropdown"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Available Seat"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_airline_seat_recline_normal_24" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/available_seat_dropdown"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Balance"
+            android:textColor="@color/black"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/balance_book"/>
+
+    </LinearLayout>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:text="Add"
+        android:text="Book"
         android:textAllCaps="true"
-        android:id="@+id/add_button"
+        android:id="@+id/book_button"
         app:cornerRadius="21dp"
         android:backgroundTint="#08BCAB"/>
 </LinearLayout>

@@ -24,7 +24,9 @@ import com.darrenJBusRD.jbus_android.model.Station;
 import com.darrenJBusRD.jbus_android.request.BaseApiService;
 import com.darrenJBusRD.jbus_android.request.UtilsApi;
 
+import java.security.AlgorithmConstraints;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -39,7 +41,7 @@ public class AddBusActivity extends AppCompatActivity {
     Button add;
     private BusType[] busType = BusType.values();
     private BusType selectedBusType;
-    private List<Station> stationList = new ArrayList<>();
+    private List<Station> stationList;
     private int selectedDeptStationID;
     private int selectedArrStationID;
     private List<Facility> selectedFacilities = new ArrayList<>();
@@ -51,7 +53,6 @@ public class AddBusActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-        // mengisi field selectedBusType sesuai dengan item yang dipilih
             selectedBusType = busType[position];
         }
         @Override
@@ -74,7 +75,6 @@ public class AddBusActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-// mengisi field selectedBusType sesuai dengan item yang dipilih
             selectedArrStationID = stationList.get(position).id;
         }
         @Override
@@ -87,6 +87,7 @@ public class AddBusActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_bus);
 
+        mContext = this;
         busName = findViewById(R.id.bus_name);
         capacity = findViewById(R.id.capacity);
         price = findViewById(R.id.price);
@@ -106,10 +107,14 @@ public class AddBusActivity extends AppCompatActivity {
         mApiService = UtilsApi.getApiService();
 
         add.setOnClickListener(v -> {
+            if(busName.getText().toString().isEmpty() || capacity.getText().toString().isEmpty() || price.getText().toString().isEmpty()) {
+                viewToast(mContext, "No field can be empty");
+                return;
+            }
             addBus();
         });
 
-        ArrayAdapter adBus = new ArrayAdapter(this, android.R.layout.simple_list_item_1, busType);
+        ArrayAdapter adBus = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, busType);
         adBus.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
         busTypeSpinner.setAdapter(adBus);
         busTypeSpinner.setOnItemSelectedListener(busTypeOISL);
@@ -122,20 +127,35 @@ public class AddBusActivity extends AppCompatActivity {
                 if(!response.isSuccessful()) {
                     viewToast(mContext, "Application error " + response.code());
                     return;
+                }else if(response.body().isEmpty()) {
+                    viewToast(mContext, "Tidak ada station yang tersedia");
+                    return;
                 }
                 stationList = response.body();
+                String[] stationName = new String[stationList.size()];
+                for(int i = 0; i < stationList.size(); i++) {
+                    stationName[i] = stationList.get(i).stationName;
+                }
+                ArrayAdapter adStation = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, stationName);
+                departureSpinner.setAdapter(adStation);
+                departureSpinner.setOnItemSelectedListener(departureOISL);
+                arrivalSpinner.setAdapter(adStation);
+                arrivalSpinner.setOnItemSelectedListener(arrivalOISL);
             }
 
             @Override
             public void onFailure(Call<List<Station>> call, Throwable t) {
-                viewToast(mContext, "Tidak ada station yang tersedia");
+                viewToast(mContext, "Problem with the Server");
             }
         });
 
     }
 
     void addBus() {
-        Bus createBus = new Bus();
+        if(selectedDeptStationID == selectedArrStationID) {
+            viewToast(mContext, "The arrival station must be different");
+            return;
+        }
         selectedFacilities.clear();
         if (ac.isChecked()) { selectedFacilities.add(Facility.AC); }
         if (wifi.isChecked()) { selectedFacilities.add(Facility.WIFI); }
@@ -146,18 +166,14 @@ public class AddBusActivity extends AppCompatActivity {
         if (largeBaggage.isChecked()) { selectedFacilities.add(Facility.LARGE_BAGGAGE); }
         if (electricSocket.isChecked()) { selectedFacilities.add(Facility.ELECTRIC_SOCKET); }
 
-        createBus.accountId = LoginActivity.loggedAccount.id;
-        createBus.name = busName.getText().toString();
-        createBus.capacity = Integer.parseInt(capacity.getText().toString());
-        createBus.price.price = Double.parseDouble(price.getText().toString());
-        createBus.busType = selectedBusType;
-        createBus.departure.id = selectedDeptStationID;
-        createBus.arrival.id = selectedArrStationID;
-        createBus.facilities = selectedFacilities;
+        if(selectedFacilities.isEmpty()) {
+            viewToast(mContext, "Bus must have at least 1 facility");
+            return;
+        }
 
-        mApiService.createBus(createBus.accountId, createBus.name, createBus.capacity,
-                createBus.facilities, createBus.busType, createBus.price.price,
-                createBus.departure.id, createBus.arrival.id).enqueue(new Callback<BaseResponse<Bus>>() {
+        mApiService.createBus(LoginActivity.loggedAccount.id, busName.getText().toString(), Integer.parseInt(capacity.getText().toString()),
+                selectedFacilities, selectedBusType, Double.parseDouble(price.getText().toString()),
+                selectedDeptStationID, selectedArrStationID).enqueue(new Callback<BaseResponse<Bus>>() {
             @Override
             public void onResponse(Call<BaseResponse<Bus>> call, Response<BaseResponse<Bus>> response) {
                 if(!response.isSuccessful()) {
@@ -166,18 +182,14 @@ public class AddBusActivity extends AppCompatActivity {
                 }
                 BaseResponse<Bus> res = response.body();
                 if(res.success) finish();
+                viewToast(mContext, "Berhasil Add Bus");
             }
 
             @Override
             public void onFailure(Call<BaseResponse<Bus>> call, Throwable t) {
-                    viewToast(mContext, "Problem with Server");
+                viewToast(mContext, "Problem with the Server");
             }
         });
-    }
-
-    private void moveActivity(Context ctx, Class<?> cls) {
-        Intent intent = new Intent(ctx, cls);
-        startActivity(intent);
     }
 
     private void viewToast(Context ctx, String message) {

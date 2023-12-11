@@ -31,8 +31,11 @@ public class BusArrayAdapter extends ArrayAdapter<Bus> {
 
          Bus currentBusPosition = getItem(position);
 
-         TextView name = currentBusView.findViewById(R.id.name);
-         name.setText(currentBusPosition.toString());
+         TextView name = currentBusView.findViewById(R.id.name_bus);
+         name.setText(currentBusPosition.name);
+
+         TextView price = currentBusView.findViewById(R.id.price_bus);
+         price.setText(String.valueOf(currentBusPosition.price.price));
 
          return currentBusView;
     }

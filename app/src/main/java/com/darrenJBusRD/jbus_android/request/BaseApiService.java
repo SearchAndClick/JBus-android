@@ -6,6 +6,7 @@ import com.darrenJBusRD.jbus_android.model.BaseResponse;
 import com.darrenJBusRD.jbus_android.model.Bus;
 import com.darrenJBusRD.jbus_android.model.BusType;
 import com.darrenJBusRD.jbus_android.model.Facility;
+import com.darrenJBusRD.jbus_android.model.Payment;
 import com.darrenJBusRD.jbus_android.model.Renter;
 import com.darrenJBusRD.jbus_android.model.Station;
 
@@ -32,7 +33,7 @@ public interface BaseApiService {
             @Query("email") String email,
             @Query("password") String password);
 
-    @GET("station/getAll")
+    @GET("station/getAllStation")
     Call<List<Station>> getAllStation();
 
     @GET("bus/getMyBus")
@@ -45,12 +46,13 @@ public interface BaseApiService {
             @Query("companyName") String companyName,
             @Query("address") String address,
             @Query("phoneNumber") String phoneNumber);
+
     @POST("account/{id}/topUp")
     Call<BaseResponse<Double>> topUp(
             @Path("id") int id,
             @Query("amount") double amount);
 
-    @POST("bus/getAllBus")
+    @GET("bus/getAllBus")
     Call<List<Bus>> getAllBus();
 
     @POST("bus/createBus")
@@ -62,6 +64,35 @@ public interface BaseApiService {
             @Query("busType") BusType busType,
             @Query("price") double price,
             @Query("stationDepartureId") int stationDepartureId,
-            @Query("stationArrivalId") int stationArrivalId
-    );
+            @Query("stationArrivalId") int stationArrivalId);
+
+    @POST("station/createStation")
+    Call<BaseResponse<Station>> createStation(
+            @Query("stationName") String stationName,
+            @Query("city") String city,
+            @Query("address") String address);
+
+    @POST("payment/makeBooking")
+    Call<BaseResponse<Payment>> makeBooking (
+            @Query("buyerId") int buyerId,
+            @Query("renterId") int renterId,
+            @Query("busId") int busId,
+            @Query("busSeats") List<String> busSeats,
+            @Query("departureDate") String departureDate);
+
+    @GET("payment/getMyPayment")
+    Call<List<Payment>> getMyPayment(@Query("buyerId") int buyerId);
+
+    @POST("payment/{id}/cancel")
+    Call<BaseResponse<Payment>> cancel (
+            @Path("id") int id);
+
+    @POST("payment/{id}/accept")
+    Call<BaseResponse<Payment>> accept (
+            @Path("id") int id);
+
+    @POST("bus/addSchedule")
+    Call<BaseResponse<Bus>> addSchedule (
+            @Query("busId") int busId,
+            @Query("time") String time);
 }

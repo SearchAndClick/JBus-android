@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="390dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:padding="30dp"
+    tools:context=".PaymentDetailActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="Payment Detail"
+        android:textSize="36dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:text="Confirm or cancel payment"
+        android:textSize="18dp"
+        android:textColor="#555555"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Bus Name"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/black"
+            android:textSize="21dp"/>
+
+        <TextView
+            android:id="@+id/bus_name_payment"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textColorHint="#6E6969"
+            android:textSize="21dp"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Capacity"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/black"
+            android:textSize="21dp"/>
+
+        <TextView
+            android:id="@+id/capacity_payment"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textSize="21dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Price"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/black"
+            android:textSize="21dp"/>
+
+        <TextView
+            android:id="@+id/price_payment"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:minHeight="24sp"
+            android:paddingHorizontal="16dp"
+            android:textSize="21dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Bus Type"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_directions_bus_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/bus_type_payment"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" >
+
+        <TextView
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Departure"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_home_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/departure_payment"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Arrival"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_forward_24"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/arrival_payment"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8sp"
+        android:textColor="@color/black"
+        android:text="Facilities"
+        android:textSize="18sp"/>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:rowCount="3"
+        android:columnCount="3">
+
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="AC"
+            android:id="@+id/ac_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="WiFi"
+            android:id="@+id/wifi_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="Toilet"
+            android:id="@+id/toilet_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="LCD TV"
+            android:id="@+id/lcd_tv_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="Coolbox"
+            android:id="@+id/coolbox_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="Lunch"
+            android:id="@+id/lunch_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="Large Baggage"
+            android:id="@+id/large_baggage_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="Electric Socket"
+            android:id="@+id/electric_socket_box"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Schedule"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_schedule_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/schedule_payment"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Seat"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_airline_seat_recline_normal_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/seat_payment"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Note: Canceling will only get 70% refund"
+        android:textSize="18dp"
+        android:textColor="#555555"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:textSize="20dp"
+            android:text="Accept"
+            android:textAllCaps="true"
+            android:id="@+id/accept_button"
+            app:cornerRadius="21dp"
+            android:textColor="@color/white"
+            android:backgroundTint="#08BCAB"/>
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Cancel"
+            android:textAllCaps="true"
+            android:id="@+id/cancel_button"
+            app:cornerRadius="21dp"
+            android:textColor="@color/white"
+            android:backgroundTint="#08BCAB"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

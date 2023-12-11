@@ -2,9 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/add_bus"
+        android:id="@+id/add_bus_menu"
         android:icon="@drawable/baseline_add_circle_outline_24"
         android:title="Add Bus"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/add_station_menu"
+        android:icon="@drawable/baseline_place_24"
+        android:title="Add Station"
+        app:showAsAction="always"/>
 
 </menu>

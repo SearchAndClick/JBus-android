@@ -1,23 +1,20 @@
 package com.darrenJBusRD.jbus_android;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.content.Context;
-import android.os.Bundle;
-import android.widget.Button;
 
-import com.darrenJBusRD.jbus_android.model.Bus;
+import com.darrenJBusRD.jbus_android.model.Payment;
 import com.darrenJBusRD.jbus_android.request.BaseApiService;
 import com.darrenJBusRD.jbus_android.request.UtilsApi;
 
@@ -28,11 +25,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ManageBusActivity extends AppCompatActivity {
-
-    List<Bus> listBus = new ArrayList<>();
+public class PaymentActivity extends AppCompatActivity {
+    List<Payment> listPayment = new ArrayList<>();
     ListView listView = null;
-    private BusArrayAdapter busArrayAdapter = null;
+    private PaymentArrayAdapter paymentArrayAdapter = null;
     private Button[] buttons;
     private int currentPage = 0;
     private int pageSize = 16;
@@ -46,26 +42,34 @@ public class ManageBusActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_bus);
+        setContentView(R.layout.activity_payment);
+        getSupportActionBar().hide();
 
         mContext = this;
-        prevButton = findViewById(R.id.prev_page_manage_bus);
-        nextButton = findViewById(R.id.next_page_manage_bus);
-        pageScroll = findViewById(R.id.page_number_scroll_manage_bus);
-        listView = findViewById(R.id.list_view_manage_bus);
+        prevButton = findViewById(R.id.prev_page_payment);
+        nextButton = findViewById(R.id.next_page_payment);
+        pageScroll = findViewById(R.id.page_number_scroll_payment);
+        listView = findViewById(R.id.list_view_payment);
 
         BaseApiService mApiService = UtilsApi.getApiService();
-        mApiService.getMyBus(LoginActivity.loggedAccount.id).enqueue(new Callback<List<Bus>>() {
+        mApiService.getMyPayment(LoginActivity.loggedAccount.id).enqueue(new Callback<List<Payment>>() {
             @Override
-            public void onResponse(Call<List<Bus>> call, Response<List<Bus>> response) {
+            public void onResponse(Call<List<Payment>> call, Response<List<Payment>> response) {
                 if(!response.isSuccessful()) {
                     viewToast(mContext, "Application error " + response.code());
                     return;
                 }
-                listBus = response.body();
-                busArrayAdapter = new BusArrayAdapter(mContext, listBus);
-                listView.setAdapter(busArrayAdapter);
-                listSize = listBus.size();
+                listPayment = response.body();
+                paymentArrayAdapter = new PaymentArrayAdapter(mContext, listPayment);
+                listView.setAdapter(paymentArrayAdapter);
+                listSize = listPayment.size();
+
+                listView.setClickable(true);
+                listView.setOnItemClickListener((adapterView, view, i, l) -> {
+                    Intent intent = new Intent(mContext, PaymentDetailActivity.class);
+                    intent.putExtra("Payment", i);
+                    startActivity(intent);
+                });
 
                 paginationFooter();
                 if(buttons == null) return;
@@ -83,27 +87,10 @@ public class ManageBusActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Bus>> call, Throwable t) {
+            public void onFailure(Call<List<Payment>> call, Throwable t) {
                 viewToast(mContext, "Problem with Server");
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.manage_bus_bar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.add_bus_menu) {
-            moveActivity(mContext, AddBusActivity.class);
-        }
-        else if(item.getItemId() == R.id.add_station_menu) {
-            moveActivity(mContext, AddStationActivity.class);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void paginationFooter() {
@@ -149,7 +136,7 @@ public class ManageBusActivity extends AppCompatActivity {
                 buttons[index].setBackgroundDrawable(getResources().getDrawable(R.drawable.oval));
                 buttons[i].setTextColor(getResources().getColor(android.R.color.white));
                 scrollToFrom(buttons[index]);
-                viewPaginatedList(listBus, currentPage);
+                viewPaginatedList(listPayment, currentPage);
             }
             else {
                 buttons[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -163,17 +150,14 @@ public class ManageBusActivity extends AppCompatActivity {
         pageScroll.smoothScrollTo(scrollX, 0);
     }
 
-    private void viewPaginatedList(List<Bus> listBus, int page) {
+    private void viewPaginatedList(List<Payment> listPayment, int page) {
         int startIndex = page * pageSize;
-        int endIndex = Math.min(startIndex + pageSize, listBus.size());
-        List<Bus> paginatedList = listBus.subList(startIndex, endIndex);
+        int endIndex = Math.min(startIndex + pageSize, listPayment.size());
+        List<Payment> paginatedList = listPayment.subList(startIndex, endIndex);
 
-        busArrayAdapter = null;
-        busArrayAdapter = new BusArrayAdapter(mContext, paginatedList);
-        listView.setAdapter(busArrayAdapter);
-//        BusArrayAdapter paginatedAdapater = (BusArrayAdapter) listView.getAdapter();
-//        busListView.setAdapter(paginatedAdapater);
-
+        paymentArrayAdapter = null;
+        paymentArrayAdapter = new PaymentArrayAdapter(mContext, paginatedList);
+        listView.setAdapter(paymentArrayAdapter);
     }
 
     private void moveActivity(Context ctx, Class<?> cls) {

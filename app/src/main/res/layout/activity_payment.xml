@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ManageBusActivity">
+    tools:context=".PaymentActivity"
+    android:orientation="vertical">
 
     <ListView
-        android:id="@+id/list_view_manage_bus"
+        android:id="@+id/list_view_payment"
         android:layout_width="match_parent"
         android:layout_height="670sp">
 
     </ListView>
 
     <LinearLayout
-        android:id="@+id/pagination_footer_manage_bus"
+        android:id="@+id/pagination_footer_payment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="21dp"
@@ -26,7 +25,7 @@
         android:paddingHorizontal="21dp">
 
         <Button
-            android:id="@+id/prev_page_manage_bus"
+            android:id="@+id/prev_page_payment"
             android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -35,21 +34,21 @@
             android:contentDescription="Previous Page"/>
 
         <HorizontalScrollView
-            android:id="@+id/page_number_scroll_manage_bus"
+            android:id="@+id/page_number_scroll_payment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="25"
             android:paddingHorizontal="18dp">
 
             <LinearLayout
-                android:id="@+id/btn_layout_manage_bus"
+                android:id="@+id/btn_layout_payment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal" />
         </HorizontalScrollView>
 
         <Button
-            android:id="@+id/next_page_manage_bus"
+            android:id="@+id/next_page_payment"
             android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
