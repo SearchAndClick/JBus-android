@@ -32,10 +32,9 @@ import retrofit2.Response;
 public class PaymentDetailActivity extends AppCompatActivity {
 
     Bus busDetail;
-    TextView busName, capacity, price, busType, departure, arrival, seatTextView;
+    TextView busName, capacity, price, busType, departure, arrival, seatTextView, schedule;
     TextView ac, wifi, toilet, lcdTv, coolbox, lunch, largeBaggage, electricSocket;
     Button accept, cancel;
-    Spinner scheduleSpinner;
     private String departureDate;
     private int position;
     private Payment paymentDetail;
@@ -82,16 +81,8 @@ public class PaymentDetailActivity extends AppCompatActivity {
         electricSocket = findViewById(R.id.electric_socket_box);
         accept = findViewById(R.id.accept_button);
         cancel = findViewById(R.id.cancel_button);
-        scheduleSpinner = findViewById(R.id.schedule_dropdown);
+        schedule = findViewById(R.id.schedule_payment);
         mApiService = UtilsApi.getApiService();
-
-        for(Schedule s: busDetail.schedules) {
-            scheduleList.add(dateFormat.format(s.departureSchedule));
-        }
-        ArrayAdapter adSchedule = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, scheduleList);
-        adSchedule.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
-        scheduleSpinner.setAdapter(adSchedule);
-        scheduleSpinner.setOnItemSelectedListener(scheduleOISL);
 
         mApiService.getMyPayment(LoginActivity.loggedAccount.id).enqueue(new Callback<List<Payment>>() {
             @Override
@@ -150,7 +141,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
         busType.setText(busDetail.busType.toString());
         departure.setText(busDetail.departure.stationName);
         arrival.setText(busDetail.arrival.stationName);
-        departure.setText(dateFormat.format(paymentDetail.departureDate));
+        schedule.setText(dateFormat.format(paymentDetail.departureDate));
         seatTextView.setText(paymentDetail.busSeats.toString());
 
         if (selectedFacilities.contains(Facility.AC)) { ac.setVisibility(View.VISIBLE); }

@@ -5,23 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.darrenJBusRD.jbus_android.model.BaseResponse;
 import com.darrenJBusRD.jbus_android.model.Bus;
-import com.darrenJBusRD.jbus_android.model.BusType;
 import com.darrenJBusRD.jbus_android.model.Facility;
 import com.darrenJBusRD.jbus_android.model.Payment;
 import com.darrenJBusRD.jbus_android.model.Schedule;
-import com.darrenJBusRD.jbus_android.model.Station;
 import com.darrenJBusRD.jbus_android.request.BaseApiService;
 import com.darrenJBusRD.jbus_android.request.UtilsApi;
 
