@@ -1,10 +1,13 @@
 package com.darrenJBusRD.jbus_android;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +29,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PaymentActivity extends AppCompatActivity {
-    List<Payment> listPayment = new ArrayList<>();
+
+    public static Context mContext;
+    private List<Payment> listPayment = new ArrayList<>();
     ListView listView = null;
     private PaymentArrayAdapter paymentArrayAdapter = null;
     private Button[] buttons;
@@ -37,13 +42,12 @@ public class PaymentActivity extends AppCompatActivity {
     private Button prevButton = null;
     private Button nextButton = null;
     private HorizontalScrollView pageScroll = null;
-    Context mContext;
+    private BaseApiService mApiService = UtilsApi.getApiService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
-        getSupportActionBar().hide();
 
         mContext = this;
         prevButton = findViewById(R.id.prev_page_payment);
@@ -51,7 +55,6 @@ public class PaymentActivity extends AppCompatActivity {
         pageScroll = findViewById(R.id.page_number_scroll_payment);
         listView = findViewById(R.id.list_view_payment);
 
-        BaseApiService mApiService = UtilsApi.getApiService();
         mApiService.getMyPayment(LoginActivity.loggedAccount.id).enqueue(new Callback<List<Payment>>() {
             @Override
             public void onResponse(Call<List<Payment>> call, Response<List<Payment>> response) {
@@ -63,13 +66,6 @@ public class PaymentActivity extends AppCompatActivity {
                 paymentArrayAdapter = new PaymentArrayAdapter(mContext, listPayment);
                 listView.setAdapter(paymentArrayAdapter);
                 listSize = listPayment.size();
-
-                listView.setClickable(true);
-                listView.setOnItemClickListener((adapterView, view, i, l) -> {
-                    Intent intent = new Intent(mContext, PaymentDetailActivity.class);
-                    intent.putExtra("Payment", i);
-                    startActivity(intent);
-                });
 
                 paginationFooter();
                 if(buttons == null) return;
@@ -88,6 +84,7 @@ public class PaymentActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Payment>> call, Throwable t) {
+                Log.e(TAG, "Network request failed", t);
                 viewToast(mContext, "Problem with Server");
             }
         });
@@ -98,7 +95,7 @@ public class PaymentActivity extends AppCompatActivity {
         val = val == 0 ? 0 : 1;
         noOfPages = listSize / pageSize + val;
 
-        if(noOfPages == 1) {
+        if(noOfPages <= 1) {
             prevButton.setVisibility(View.GONE);
             nextButton.setVisibility(View.GONE);
             pageScroll.setVisibility(View.GONE);
@@ -108,7 +105,7 @@ public class PaymentActivity extends AppCompatActivity {
         nextButton.setVisibility(View.VISIBLE);
         pageScroll.setVisibility(View.VISIBLE);
 
-        LinearLayout ll = findViewById(R.id.btn_layout_manage_bus);
+        LinearLayout ll = findViewById(R.id.btn_layout_payment);
         buttons = new Button[noOfPages];
         if(noOfPages <= 6) {
             ((FrameLayout.LayoutParams) ll.getLayoutParams()).gravity = Gravity.CENTER;
@@ -158,11 +155,6 @@ public class PaymentActivity extends AppCompatActivity {
         paymentArrayAdapter = null;
         paymentArrayAdapter = new PaymentArrayAdapter(mContext, paginatedList);
         listView.setAdapter(paymentArrayAdapter);
-    }
-
-    private void moveActivity(Context ctx, Class<?> cls) {
-        Intent intent = new Intent(ctx, cls);
-        startActivity(intent);
     }
 
     private void viewToast(Context ctx, String message) {

@@ -1,6 +1,7 @@
 package com.darrenJBusRD.jbus_android.model;
 
 import java.sql.Timestamp;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Schedule {

@@ -30,9 +30,10 @@ import retrofit2.Response;
 
 public class ManageBusActivity extends AppCompatActivity {
 
-    List<Bus> listBus = new ArrayList<>();
+    public static Context mContext;
+    public static List<Bus> listBus = new ArrayList<>();
     ListView listView = null;
-    private BusArrayAdapter busArrayAdapter = null;
+    private MyBusArrayAdapter busArrayAdapter = null;
     private Button[] buttons;
     private int currentPage = 0;
     private int pageSize = 16;
@@ -41,7 +42,7 @@ public class ManageBusActivity extends AppCompatActivity {
     private Button prevButton = null;
     private Button nextButton = null;
     private HorizontalScrollView pageScroll = null;
-    Context mContext;
+    private BaseApiService mApiService = UtilsApi.getApiService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,6 @@ public class ManageBusActivity extends AppCompatActivity {
         pageScroll = findViewById(R.id.page_number_scroll_manage_bus);
         listView = findViewById(R.id.list_view_manage_bus);
 
-        BaseApiService mApiService = UtilsApi.getApiService();
         mApiService.getMyBus(LoginActivity.loggedAccount.id).enqueue(new Callback<List<Bus>>() {
             @Override
             public void onResponse(Call<List<Bus>> call, Response<List<Bus>> response) {
@@ -63,7 +63,44 @@ public class ManageBusActivity extends AppCompatActivity {
                     return;
                 }
                 listBus = response.body();
-                busArrayAdapter = new BusArrayAdapter(mContext, listBus);
+                busArrayAdapter = new MyBusArrayAdapter(mContext, listBus);
+                listView.setAdapter(busArrayAdapter);
+                listSize = listBus.size();
+
+                paginationFooter();
+                if(buttons == null) return;
+                goToPage(currentPage);
+
+                prevButton.setOnClickListener(v -> {
+                    currentPage = currentPage != 0 ? currentPage - 1 : 0;
+                    goToPage(currentPage);
+                });
+
+                nextButton.setOnClickListener(v -> {
+                    currentPage = currentPage != noOfPages - 1 ? currentPage + 1 : currentPage;
+                    goToPage(currentPage);
+                });
+            }
+
+            @Override
+            public void onFailure(Call<List<Bus>> call, Throwable t) {
+                viewToast(mContext, "Problem with Server");
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mApiService.getMyBus(LoginActivity.loggedAccount.id).enqueue(new Callback<List<Bus>>() {
+            @Override
+            public void onResponse(Call<List<Bus>> call, Response<List<Bus>> response) {
+                if(!response.isSuccessful()) {
+                    viewToast(mContext, "Application error " + response.code());
+                    return;
+                }
+                listBus = response.body();
+                busArrayAdapter = new MyBusArrayAdapter(mContext, listBus);
                 listView.setAdapter(busArrayAdapter);
                 listSize = listBus.size();
 
@@ -111,7 +148,7 @@ public class ManageBusActivity extends AppCompatActivity {
         val = val == 0 ? 0 : 1;
         noOfPages = listSize / pageSize + val;
 
-        if(noOfPages == 1) {
+        if(noOfPages <= 1) {
             prevButton.setVisibility(View.GONE);
             nextButton.setVisibility(View.GONE);
             pageScroll.setVisibility(View.GONE);
@@ -169,9 +206,9 @@ public class ManageBusActivity extends AppCompatActivity {
         List<Bus> paginatedList = listBus.subList(startIndex, endIndex);
 
         busArrayAdapter = null;
-        busArrayAdapter = new BusArrayAdapter(mContext, paginatedList);
+        busArrayAdapter = new MyBusArrayAdapter(mContext, paginatedList);
         listView.setAdapter(busArrayAdapter);
-//        BusArrayAdapter paginatedAdapater = (BusArrayAdapter) listView.getAdapter();
+//        MyBusArrayAdapter paginatedAdapater = (MyBusArrayAdapter) listView.getAdapter();
 //        busListView.setAdapter(paginatedAdapater);
 
     }

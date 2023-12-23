@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.darrenJBusRD.jbus_android.model.Account;
 import com.darrenJBusRD.jbus_android.model.BaseResponse;
 import com.darrenJBusRD.jbus_android.request.BaseApiService;
-import com.darrenJBusRD.jbus_android.request.RetrofitClient;
 import com.darrenJBusRD.jbus_android.request.UtilsApi;
 
 import retrofit2.Call;
@@ -66,6 +65,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 BaseResponse<Account> res = response.body();
+                if(res.payload == null) {
+                    viewToast(mContext, "Account tidak ditemukan");
+                    return;
+                }
                 if(res.success) finish();
                 loggedAccount = res.payload;
                 moveActivity(mContext, MainActivity.class);
@@ -87,6 +90,4 @@ public class LoginActivity extends AppCompatActivity {
     private void viewToast(Context ctx, String message) {
         Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show();
     }
-
-
 }

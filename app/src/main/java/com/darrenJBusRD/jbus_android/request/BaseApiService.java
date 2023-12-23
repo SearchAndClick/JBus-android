@@ -81,7 +81,8 @@ public interface BaseApiService {
             @Query("departureDate") String departureDate);
 
     @GET("payment/getMyPayment")
-    Call<List<Payment>> getMyPayment(@Query("buyerId") int buyerId);
+    Call<List<Payment>> getMyPayment(
+            @Query("buyerId") int buyerId);
 
     @POST("payment/{id}/cancel")
     Call<BaseResponse<Payment>> cancel (

@@ -44,6 +44,7 @@
 
         <TextView
             android:id="@+id/bus_name_payment"
+            android:gravity="center_vertical"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -59,28 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
-
-        <TextView
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="Capacity"
-            android:minHeight="24sp"
-            android:paddingHorizontal="16dp"
-            android:textColor="@color/black"
-            android:textSize="21dp"/>
-
-        <TextView
-            android:id="@+id/capacity_payment"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:minHeight="24sp"
-            android:paddingHorizontal="16dp"
-            android:textSize="21dp"/>
-
-    </LinearLayout>
+        android:gravity="center"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,6 +80,7 @@
 
         <TextView
             android:id="@+id/price_payment"
+            android:gravity="center_vertical"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -124,10 +105,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="10dp"
             android:src="@drawable/baseline_directions_bus_24" />
 
         <TextView
             android:layout_width="match_parent"
+            android:gravity="center_vertical"
             android:layout_height="48dp"
             android:id="@+id/bus_type_payment"/>
     </LinearLayout>
@@ -148,10 +131,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="10dp"
             android:src="@drawable/baseline_home_24" />
 
         <TextView
             android:layout_width="match_parent"
+            android:gravity="center_vertical"
             android:layout_height="48dp"
             android:id="@+id/departure_payment"/>
     </LinearLayout>
@@ -171,12 +156,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="10dp"
             android:src="@drawable/baseline_arrow_forward_24"
             android:visibility="visible"
             tools:visibility="visible" />
 
         <TextView
             android:layout_width="match_parent"
+            android:gravity="center_vertical"
             android:layout_height="48dp"
             android:id="@+id/arrival_payment"/>
     </LinearLayout>
@@ -285,10 +272,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="10dp"
             android:src="@drawable/baseline_schedule_24" />
 
         <TextView
             android:layout_width="match_parent"
+            android:gravity="center_vertical"
             android:layout_height="48dp"
             android:id="@+id/schedule_payment"/>
 
@@ -309,10 +298,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="10dp"
             android:src="@drawable/baseline_airline_seat_recline_normal_24" />
 
         <TextView
             android:layout_width="match_parent"
+            android:gravity="center_vertical"
             android:layout_height="48dp"
             android:id="@+id/seat_payment"/>
 
@@ -325,6 +316,7 @@
         android:layout_gravity="center_horizontal"
         android:text="Note: Canceling will only get 70% refund"
         android:textSize="18dp"
+        android:id="@+id/note_payment_detail"
         android:textColor="#555555"/>
 
     <LinearLayout

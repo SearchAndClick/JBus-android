@@ -3,8 +3,10 @@ package com.darrenJBusRD.jbus_android;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,26 +25,27 @@ import com.darrenJBusRD.jbus_android.request.UtilsApi;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BusDetailActivity extends AppCompatActivity {
-    Bus busDetail;
+    public static Bus busDetail;
     TextView busName, capacity, price, busType, departure, arrival, balance;
     TextView ac, wifi, toilet, lcdTv, coolbox, lunch, largeBaggage, electricSocket;
     Button book;
-    Spinner scheduleSpinner;
+    Spinner scheduleSpinner, seatSpinner;
     private String departureDate, seat;
-    private int position, schedulePosition;
+    private List<String> availableSeat;
+    private int schedulePosition;
     private List<String> busSeats = new ArrayList<>();
-    private List<String> availableSeat = new ArrayList<>();
-    private List<String> scheduleList = new ArrayList<>();
     private List<Facility> selectedFacilities = new ArrayList<>();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss");
     BaseApiService mApiService = null;
     Context mContext;
 
@@ -51,7 +54,8 @@ public class BusDetailActivity extends AppCompatActivity {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
             departureDate = dateFormat.format(busDetail.schedules.get(position).departureSchedule);
-
+            schedulePosition = position;
+            updateAvailableSeats();
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
@@ -62,16 +66,10 @@ public class BusDetailActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-            schedulePosition = position;
             seat = availableSeat.get(position);
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
-            availableSeat.clear();
-            Set<String> keys = busDetail.schedules.get(schedulePosition).seatAvailability.keySet();
-            for(String s: keys) {
-                availableSeat.add(s);
-            }
         }
     };
 
@@ -80,9 +78,6 @@ public class BusDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus_detail);
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            position = extras.getInt("Bus");
-        }
         mContext = this;
         busName = findViewById(R.id.bus_name_book);
         capacity = findViewById(R.id.capacity_book);
@@ -101,35 +96,20 @@ public class BusDetailActivity extends AppCompatActivity {
         electricSocket = findViewById(R.id.electric_socket_box);
         book = findViewById(R.id.book_button);
         scheduleSpinner = findViewById(R.id.schedule_dropdown);
+        seatSpinner = findViewById(R.id.available_seat_dropdown);
         mApiService = UtilsApi.getApiService();
+        viewBus();
 
+        String[] scheduleArray = new String[busDetail.schedules.size()];
+        int i = 0;
         for(Schedule s: busDetail.schedules) {
-            scheduleList.add(dateFormat.format(s.departureSchedule));
+            scheduleArray[i++] = dateFormat.format(s.departureSchedule);
         }
-        ArrayAdapter adSchedule = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, scheduleList);
+        ArrayAdapter adSchedule = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, scheduleArray);
         adSchedule.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
         scheduleSpinner.setAdapter(adSchedule);
         scheduleSpinner.setOnItemSelectedListener(scheduleOISL);
 
-        mApiService.getAllBus().enqueue(new Callback<List<Bus>>() {
-            @Override
-            public void onResponse(Call<List<Bus>> call, Response<List<Bus>> response) {
-                if(!response.isSuccessful()) {
-                    viewToast(mContext, "Application error " + response.code());
-                    return;
-                }else if(response.body().isEmpty()) {
-                    viewToast(mContext, "Tidak ada bus yang tersedia");
-                    return;
-                }
-                busDetail = response.body().get(position);
-                viewBus();
-            }
-
-            @Override
-            public void onFailure(Call<List<Bus>> call, Throwable t) {
-                viewToast(mContext, "Problem with the Server");
-            }
-        });
     }
     void viewBus() {
         selectedFacilities = busDetail.facilities;
@@ -159,6 +139,10 @@ public class BusDetailActivity extends AppCompatActivity {
         else { largeBaggage.setVisibility(View.GONE); }
 
         book.setOnClickListener(b -> {
+            if(LoginActivity.loggedAccount.balance < busDetail.price.price) {
+                viewToast(mContext, "Balance Anda tidak cukup");
+                return;
+            }
             busSeats.clear();
             busSeats.add(seat);
             mApiService.makeBooking(LoginActivity.loggedAccount.id, busDetail.accountId, busDetail.id, busSeats, departureDate).enqueue(new Callback<BaseResponse<Payment>>() {
@@ -169,7 +153,10 @@ public class BusDetailActivity extends AppCompatActivity {
                         return;
                     }
                     BaseResponse<Payment> res = response.body();
+                    LoginActivity.loggedAccount.balance -= busDetail.price.price;
                     if(res.success) finish();
+                    Intent intent = new Intent(mContext, MainActivity.class);
+                    startActivity(intent);
                     viewToast(mContext, "Berhasil Booking");
                 }
 
@@ -183,5 +170,22 @@ public class BusDetailActivity extends AppCompatActivity {
 
     private void viewToast(Context ctx, String message) {
         Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateAvailableSeats() {
+        Set<String> keys = busDetail.schedules.get(schedulePosition).seatAvailability.keySet();
+        String[] available = new String[keys.size()];
+        System.out.println(available);
+        int i = 0;
+        for(String s: keys) {
+            if(busDetail.schedules.get(schedulePosition).seatAvailability.get(s)) {
+                available[i++] = (s);
+            }
+        }
+        availableSeat = Arrays.asList(available);
+        ArrayAdapter adSeat = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, available);
+        adSeat.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        seatSpinner.setAdapter(adSeat);
+        seatSpinner.setOnItemSelectedListener(seatOISL);
     }
 }

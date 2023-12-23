@@ -35,6 +35,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static Context mContext;
     public BusArrayAdapter busArrayAdapter;
     private ListView listView;
     private Button[] buttons;
@@ -42,12 +43,12 @@ public class MainActivity extends AppCompatActivity {
     private int pageSize = 16;
     private int listSize;
     private int noOfPages;
-    private List<Bus> listBus = new ArrayList<>();
+    public static List<Bus> listBus = new ArrayList<>();
     private Button prevButton = null;
     private Button nextButton = null;
     private HorizontalScrollView pageScroll = null;
-    Context mContext;
-    @SuppressLint("WrongViewCast")
+    private BaseApiService mApiService = UtilsApi.getApiService();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         pageScroll = findViewById(R.id.page_number_scroll);
         listView = findViewById(R.id.list_view_main);
 
-        BaseApiService mApiService = UtilsApi.getApiService();
-
         mApiService.getAllBus().enqueue(new Callback<List<Bus>>() {
             @Override
             public void onResponse(Call<List<Bus>> call, Response<List<Bus>> response) {
@@ -70,23 +69,21 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 listBus = response.body();
+                for(int i = 0; i < listBus.size(); i++) {
+                    if(listBus.get(i).schedules.isEmpty()) {
+                        listBus.remove(i);
+                        i--;
+                    }
+                }
 //                listBus = Bus.sampleBusList(18);
                 busArrayAdapter = new BusArrayAdapter(mContext, listBus);
                 listView.setAdapter(busArrayAdapter);
                 listSize = listBus.size();
-//                System.out.println(listBus);
-//                System.out.println(listBus.size() + " " + listSize);
 
                 paginationFooter();
                 if(buttons == null) return;
                 goToPage(currentPage);
 
-                listView.setClickable(true);
-                listView.setOnItemClickListener((adapterView, view, i, l) -> {
-                    Intent intent = new Intent(mContext, BusDetailActivity.class);
-                    intent.putExtra("Bus", i);
-                    startActivity(intent);
-                });
 
                 prevButton.setOnClickListener(v -> {
                     currentPage = currentPage != 0 ? currentPage - 1 : 0;
@@ -97,7 +94,50 @@ public class MainActivity extends AppCompatActivity {
                     currentPage = currentPage != noOfPages - 1 ? currentPage + 1 : currentPage;
                     goToPage(currentPage);
                 });
+            }
 
+            @Override
+            public void onFailure(Call<List<Bus>> call, Throwable t) {
+                viewToast(mContext, "Problem with Server");
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mApiService.getAllBus().enqueue(new Callback<List<Bus>>() {
+            @Override
+            public void onResponse(Call<List<Bus>> call, Response<List<Bus>> response) {
+                if(!response.isSuccessful()) {
+                    viewToast(mContext, "Application error " + response.code());
+                    return;
+                }
+                listBus = response.body();
+                for(int i = 0; i < listBus.size(); i++) {
+                    if(listBus.get(i).schedules.isEmpty()) {
+                        listBus.remove(i);
+                        i--;
+                    }
+                }
+                busArrayAdapter = new BusArrayAdapter(mContext, listBus);
+                listView.setAdapter(busArrayAdapter);
+                listSize = listBus.size();
+
+                paginationFooter();
+                if(buttons == null) return;
+                goToPage(currentPage);
+
+
+                prevButton.setOnClickListener(v -> {
+                    currentPage = currentPage != 0 ? currentPage - 1 : 0;
+                    goToPage(currentPage);
+                });
+
+                nextButton.setOnClickListener(v -> {
+                    currentPage = currentPage != noOfPages - 1 ? currentPage + 1 : currentPage;
+                    goToPage(currentPage);
+                });
             }
 
             @Override
@@ -133,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         val = val == 0 ? 0 : 1;
         noOfPages = listSize / pageSize + val;
 //        System.out.println(noOfPages + " " + listSize + " " + pageSize + " " + val);
-        if(noOfPages == 1) {
+        if(noOfPages <= 1) {
             prevButton.setVisibility(View.GONE);
             nextButton.setVisibility(View.GONE);
             pageScroll.setVisibility(View.GONE);

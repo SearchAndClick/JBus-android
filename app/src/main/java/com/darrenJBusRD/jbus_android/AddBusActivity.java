@@ -127,7 +127,7 @@ public class AddBusActivity extends AppCompatActivity {
                 if(!response.isSuccessful()) {
                     viewToast(mContext, "Application error " + response.code());
                     return;
-                }else if(response.body().isEmpty()) {
+                } else if(response.body().isEmpty()) {
                     viewToast(mContext, "Tidak ada station yang tersedia");
                     return;
                 }

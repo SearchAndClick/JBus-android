@@ -1,6 +1,9 @@
 package com.darrenJBusRD.jbus_android.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Invoice extends Serializable
 {
@@ -30,6 +33,7 @@ public class Invoice extends Serializable
         super();
         this.buyerId = buyerId;
         this.renterId = renterId;
+        this.time = Timestamp.valueOf(LocalDateTime.now().toString());
     }
 
     public Invoice(Account buyer, Renter renter)
@@ -37,5 +41,6 @@ public class Invoice extends Serializable
         super();
         this.buyerId = buyer.id ;
         this.renterId = renter.id ;
+        this.time = Timestamp.valueOf(LocalDateTime.now().toString());
     }
 }

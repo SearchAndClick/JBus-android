@@ -40,7 +40,7 @@
             android:minHeight="24sp"
             android:paddingHorizontal="16dp"
             android:textColor="@color/black"
-            android:textSize="21dp"/>
+            android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/bus_name_book"
@@ -50,7 +50,7 @@
             android:minHeight="24sp"
             android:paddingHorizontal="16dp"
             android:textColorHint="#6E6969"
-            android:textSize="21dp"/>
+            android:textSize="18dp"/>
 
     </LinearLayout>
 
@@ -69,7 +69,7 @@
             android:minHeight="24sp"
             android:paddingHorizontal="16dp"
             android:textColor="@color/black"
-            android:textSize="21dp"/>
+            android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/capacity_book"
@@ -78,7 +78,7 @@
             android:layout_marginBottom="10dp"
             android:minHeight="24sp"
             android:paddingHorizontal="16dp"
-            android:textSize="21dp"/>
+            android:textSize="18dp"/>
 
     </LinearLayout>
 
@@ -96,7 +96,7 @@
             android:minHeight="24sp"
             android:paddingHorizontal="16dp"
             android:textColor="@color/black"
-            android:textSize="21dp"/>
+            android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/price_book"
@@ -105,7 +105,7 @@
             android:layout_marginBottom="10dp"
             android:minHeight="24sp"
             android:paddingHorizontal="16dp"
-            android:textSize="21dp"/>
+            android:textSize="18dp"/>
 
     </LinearLayout>
 
@@ -117,7 +117,7 @@
         <TextView
             android:layout_width="96dp"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:text="Bus Type"
             android:textColor="@color/black"/>
 
@@ -128,7 +128,8 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:layout_height="36dp"
             android:id="@+id/bus_type_book"/>
     </LinearLayout>
 
@@ -141,7 +142,7 @@
         <TextView
             android:layout_width="96dp"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:text="Departure"
             android:textColor="@color/black"/>
 
@@ -152,7 +153,8 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:layout_height="36dp"
             android:id="@+id/departure_book"/>
     </LinearLayout>
 
@@ -164,7 +166,7 @@
         <TextView
             android:layout_width="96dp"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:text="Arrival"
             android:textColor="@color/black"/>
 
@@ -177,7 +179,8 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:layout_height="36dp"
             android:id="@+id/arrival_book"/>
     </LinearLayout>
 
@@ -272,13 +275,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:gravity="center">
         <TextView
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:text="Schedule"
             android:textColor="@color/black"/>
 
@@ -289,7 +292,7 @@
 
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="36dp"
             android:id="@+id/schedule_dropdown"/>
 
     </LinearLayout>
@@ -302,7 +305,7 @@
         <TextView
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:text="Available Seat"
             android:textColor="@color/black"/>
 
@@ -313,7 +316,7 @@
 
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="36dp"
             android:id="@+id/available_seat_dropdown"/>
 
     </LinearLayout>
@@ -326,14 +329,15 @@
         <TextView
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:text="Balance"
             android:textColor="@color/black"/>
 
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:layout_height="36dp"
             android:id="@+id/balance_book"/>
 
     </LinearLayout>

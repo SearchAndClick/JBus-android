@@ -3,6 +3,7 @@ package com.darrenJBusRD.jbus_android;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.darrenJBusRD.jbus_android.model.BaseResponse;
 import com.darrenJBusRD.jbus_android.model.Bus;
 import com.darrenJBusRD.jbus_android.model.Facility;
+import com.darrenJBusRD.jbus_android.model.Invoice;
 import com.darrenJBusRD.jbus_android.model.Payment;
 import com.darrenJBusRD.jbus_android.model.Schedule;
 import com.darrenJBusRD.jbus_android.request.BaseApiService;
@@ -31,29 +33,18 @@ import retrofit2.Response;
 
 public class PaymentDetailActivity extends AppCompatActivity {
 
-    Bus busDetail;
-    TextView busName, capacity, price, busType, departure, arrival, seatTextView, schedule;
-    TextView ac, wifi, toilet, lcdTv, coolbox, lunch, largeBaggage, electricSocket;
+    public static Payment paymentDetail;
+    private Bus busDetail;
+    TextView busName, price, busType, departure, arrival, seatTextView, schedule;
+    TextView ac, wifi, toilet, lcdTv, coolbox, lunch, largeBaggage, electricSocket, note;
     Button accept, cancel;
     private String departureDate;
     private int position;
-    private Payment paymentDetail;
     private List<String> scheduleList = new ArrayList<>();
     private List<Facility> selectedFacilities = new ArrayList<>();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss");
     BaseApiService mApiService = null;
     Context mContext;
-
-    AdapterView.OnItemSelectedListener scheduleOISL = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-            departureDate = dateFormat.format(busDetail.schedules.get(position).departureSchedule);
-        }
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +52,10 @@ public class PaymentDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment_detail);
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            position = extras.getInt("Bus");
+            position = extras.getInt("Payment");
         }
         mContext = this;
         busName = findViewById(R.id.bus_name_payment);
-        capacity = findViewById(R.id.capacity_payment);
         price = findViewById(R.id.price_payment);
         busType = findViewById(R.id.bus_type_payment);
         departure = findViewById(R.id.departure_payment);
@@ -79,64 +69,25 @@ public class PaymentDetailActivity extends AppCompatActivity {
         lunch = findViewById(R.id.lunch_box);
         largeBaggage = findViewById(R.id.large_baggage_box);
         electricSocket = findViewById(R.id.electric_socket_box);
+        note = findViewById(R.id.note_payment_detail);
         accept = findViewById(R.id.accept_button);
         cancel = findViewById(R.id.cancel_button);
         schedule = findViewById(R.id.schedule_payment);
         mApiService = UtilsApi.getApiService();
 
-        mApiService.getMyPayment(LoginActivity.loggedAccount.id).enqueue(new Callback<List<Payment>>() {
-            @Override
-            public void onResponse(Call<List<Payment>> call, Response<List<Payment>> response) {
-                if(!response.isSuccessful()) {
-                    viewToast(mContext, "Application error " + response.code());
-                    return;
-                }else if(response.body().isEmpty()) {
-                    viewToast(mContext, "Tidak ada bus yang tersedia");
-                    return;
-                }
-                paymentDetail = response.body().get(position);
-                getBus();
-            }
-
-            @Override
-            public void onFailure(Call<List<Payment>> call, Throwable t) {
-
-            }
-        });
-
-    }
-
-    void getBus() {
-        mApiService.getAllBus().enqueue(new Callback<List<Bus>>() {
-            @Override
-            public void onResponse(Call<List<Bus>> call, Response<List<Bus>> response) {
-                if(!response.isSuccessful()) {
-                    viewToast(mContext, "Application error " + response.code());
-                    return;
-                }else if(response.body().isEmpty()) {
-                    viewToast(mContext, "Tidak ada bus yang tersedia");
-                    return;
-                }
-                for(Bus b: response.body()) {
-                    if(b.id == paymentDetail.busId) {
-                        busDetail = b;
-                        break;
-                    }
-                }
-                confirmPayment();
-            }
-
-            @Override
-            public void onFailure(Call<List<Bus>> call, Throwable t) {
-                viewToast(mContext, "Problem with the Server");
-            }
-        });
+        confirmPayment();
     }
 
     void confirmPayment() {
+        for(Bus b: MainActivity.listBus) {
+            if(b.id == paymentDetail.busId) {
+                busDetail = b;
+                break;
+            }
+        }
+
         selectedFacilities = busDetail.facilities;
         busName.setText(busDetail.name);
-        capacity.setText(String.valueOf(busDetail.capacity));
         price.setText(String.valueOf(busDetail.price.price));
         busType.setText(busDetail.busType.toString());
         departure.setText(busDetail.departure.stationName);
@@ -161,6 +112,12 @@ public class PaymentDetailActivity extends AppCompatActivity {
         if (selectedFacilities.contains(Facility.ELECTRIC_SOCKET)) { electricSocket.setVisibility(View.VISIBLE); }
         else { largeBaggage.setVisibility(View.GONE); }
 
+        if(paymentDetail.status == Invoice.PaymentStatus.SUCCESS || paymentDetail.status == Invoice.PaymentStatus.FAILED) {
+            accept.setVisibility(View.GONE);
+            cancel.setVisibility(View.GONE);
+            note.setVisibility(View.GONE);
+        }
+
         accept.setOnClickListener(a -> {
             mApiService.accept(paymentDetail.id).enqueue(new Callback<BaseResponse<Payment>>() {
                 @Override
@@ -171,6 +128,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                     }
                     BaseResponse res = response.body();
                     if(res.success) finish();
+                    moveActivity(mContext, PaymentActivity.class);
                     viewToast(mContext, "Accept Payment Berhasil");
                 }
 
@@ -190,7 +148,9 @@ public class PaymentDetailActivity extends AppCompatActivity {
                         return;
                     }
                     BaseResponse res = response.body();
+                    LoginActivity.loggedAccount.balance += busDetail.price.price * 0.7;
                     if(res.success) finish();
+                    moveActivity(mContext, PaymentActivity.class);
                     viewToast(mContext, "Cancel Payment Berhasil");
                 }
 
@@ -200,7 +160,11 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 }
             });
         });
+    }
 
+    private void moveActivity(Context ctx, Class<?> cls) {
+        Intent intent = new Intent(ctx, cls);
+        startActivity(intent);
     }
 
     private void viewToast(Context ctx, String message) {

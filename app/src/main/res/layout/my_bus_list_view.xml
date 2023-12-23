@@ -5,31 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:id="@+id/bus_list_view"
     tools:ignore="UselessParent">
 
     <LinearLayout
+        android:id="@+id/my_bus_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="16dp"
-        android:id="@+id/layout_payment">
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/status_payment"
-            android:layout_width="200dp"
+            android:id="@+id/my_name_bus"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold"
-            tools:ignore="RtlHardcoded"/>
+            tools:ignore="RtlHardcoded" />
 
         <TextView
-            android:id="@+id/departure_payment"
-            android:layout_width="200dp"
+            android:id="@+id/my_price_bus"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="18sp"
-            tools:ignore="RtlHardcoded"/>
+            tools:ignore="RtlHardcoded" />
+
+        <ImageView
+            android:id="@+id/my_calendar_bus"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_calendar_month_24"/>
 
     </LinearLayout>
 
